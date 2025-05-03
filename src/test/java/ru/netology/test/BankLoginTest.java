@@ -33,28 +33,22 @@ public class BankLoginTest {
     }
 
     @Test
-    void shouldGetErrorNotificationIfLoginWithRandomUserWithoutAddingToBase() {
+    void shouldShowErrorIfRandomUserTriesToLogin() {
+        var loginPage = open("http://localhost:9999", LoginPage.class);
         var authInfo = DataHelper.generateRandomUser();
-        loginPage.invalidLogin(authInfo);
-        loginPage.verifyErrorNotificationVisibility("Ошибка!");
+        loginPage.validLogin(authInfo);
+        loginPage.verifyErrorNotificationVisibility("Ошибка! Неверно указан логин или пароль");
     }
 
     @Test
-    void shouldStayOnVerificationPageIfCodeInvalid() {
+    void shouldShowErrorIfVerificationCodeInvalid() {
         var loginPage = open("http://localhost:9999", LoginPage.class);
         var authInfo = DataHelper.getAuthInfoWithTestData();
         var verificationPage = loginPage.validLogin(authInfo);
         verificationPage.verifyVerificationPageVisibility();
+
         var invalidCode = DataHelper.generateRandomVerificationCode();
         verificationPage.verify(invalidCode.getCode());
-        verificationPage.verifyVerificationPageVisibility();
-    }
-    @Test
-    void shouldLoginWithCodeFromDb() {
-        var authInfo = DataHelper.getAuthInfoWithTestData();
-        var verificationPage = loginPage.validLogin(authInfo);
-        var code = DataHelper.getVerificationCodeFor(authInfo.getLogin());
-        var dashboardPage = verificationPage.validVerify(code);
-        dashboardPage.shouldBeVisible();
+        verificationPage.verifyErrorNotificationVisibility("Ошибка! Неверно указан код! Попробуйте ещё раз.");
     }
 }

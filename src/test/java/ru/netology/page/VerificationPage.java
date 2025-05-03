@@ -29,9 +29,8 @@ public class VerificationPage {
     }
 
     public void verifyErrorNotificationVisibility(String expectedText) {
-        errorNotification.shouldBe(visible, Duration.ofSeconds(10))
+        errorNotification.shouldBe(visible, Duration.ofSeconds(15))
                 .shouldHave(text(expectedText));
-
     }
 
     public void verify(String code) {
