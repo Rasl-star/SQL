@@ -15,17 +15,19 @@ public class LoginPage {
     private final SelenideElement loginButton = $("[data-test-id=action-login]");
     private final SelenideElement errorNotification = $("[data-test-id='error-notification']");
 
-    public VerificationPage validLogin(DataHelper.AuthInfo info) {
+    private void performLogin(DataHelper.AuthInfo info) {
         loginField.setValue(info.getLogin());
         passwordField.setValue(info.getPassword());
         loginButton.click();
+    }
+
+    public VerificationPage validLogin(DataHelper.AuthInfo info) {
+        performLogin(info);
         return new VerificationPage();
     }
 
     public void invalidLogin(DataHelper.AuthInfo info) {
-        loginField.setValue(info.getLogin());
-        passwordField.setValue(info.getPassword());
-        loginButton.click();
+        performLogin(info);
     }
 
     public void verifyErrorNotificationVisibility(String expectedText) {

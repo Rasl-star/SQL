@@ -34,7 +34,6 @@ public class BankLoginTest {
 
     @Test
     void shouldShowErrorIfRandomUserTriesToLogin() {
-        var loginPage = open("http://localhost:9999", LoginPage.class);
         var authInfo = DataHelper.generateRandomUser();
         loginPage.validLogin(authInfo);
         loginPage.verifyErrorNotificationVisibility("Ошибка! Неверно указан логин или пароль");
@@ -42,11 +41,9 @@ public class BankLoginTest {
 
     @Test
     void shouldShowErrorIfVerificationCodeInvalid() {
-        var loginPage = open("http://localhost:9999", LoginPage.class);
         var authInfo = DataHelper.getAuthInfoWithTestData();
         var verificationPage = loginPage.validLogin(authInfo);
         verificationPage.verifyVerificationPageVisibility();
-
         var invalidCode = DataHelper.generateRandomVerificationCode();
         verificationPage.verify(invalidCode.getCode());
         verificationPage.verifyErrorNotificationVisibility("Ошибка! Неверно указан код! Попробуйте ещё раз.");
